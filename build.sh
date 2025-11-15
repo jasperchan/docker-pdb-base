@@ -4,7 +4,7 @@ set -e
 # Configuration
 IMAGE_NAME="jasperchan/pdb-base"
 DOCKERFILE="Dockerfile" # Assuming the Dockerfile is in the current directory
-VERSION="1.0.1"         # You can adjust this or make it a parameter
+VERSION="1.0.2"         # You can adjust this or make it a parameter
 
 # Print banner
 echo "========================================"
