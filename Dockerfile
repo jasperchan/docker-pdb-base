@@ -8,13 +8,13 @@
 ###############################################################################
 
 # Define software versions.
-ARG HANDBRAKE_VERSION=1.9.2
+ARG HANDBRAKE_VERSION=1.10.2
 ARG LIBVA_VERSION=2.22.0
 ARG INTEL_VAAPI_DRIVER_VERSION=2.4.1
-ARG GMMLIB_VERSION=22.7.1
-ARG INTEL_MEDIA_DRIVER_VERSION=25.1.4
+ARG GMMLIB_VERSION=22.8.1
+ARG INTEL_MEDIA_DRIVER_VERSION=25.2.6
 ARG INTEL_MEDIA_SDK_VERSION=23.2.2
-ARG INTEL_ONEVPL_GPU_RUNTIME_VERSION=25.1.4
+ARG INTEL_ONEVPL_GPU_RUNTIME_VERSION=25.2.6
 ARG CPU_FEATURES_VERSION=0.9.0
 
 # Define software download URLs.
@@ -34,7 +34,7 @@ ARG HANDBRAKE_DEBUG_MODE=none
 FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
 
 # Build HandBrake.
-FROM --platform=$BUILDPLATFORM alpine:3.19 AS handbrake
+FROM --platform=$BUILDPLATFORM alpine:3.20 AS handbrake
 ARG TARGETPLATFORM
 ARG HANDBRAKE_VERSION
 ARG HANDBRAKE_URL
@@ -61,14 +61,13 @@ RUN xx-verify \
     /tmp/handbrake-install/usr/bin/HandBrakeCLI
 
 # Build cpu_features.
-FROM --platform=$BUILDPLATFORM alpine:3.19 AS cpu_features
+FROM --platform=$BUILDPLATFORM alpine:3.20 AS cpu_features
 ARG TARGETPLATFORM
 ARG CPU_FEATURES_URL
 COPY --from=xx / /
 COPY src/cpu_features /build
 RUN /build/build.sh "$CPU_FEATURES_URL"
 RUN xx-verify /tmp/cpu_features-install/bin/list_cpu_features
-
 
 # FFMPEG
 # https://dev.to/ethand91/using-a-newer-version-of-ffmpeg-with-docker-3b69
@@ -221,6 +220,4 @@ COPY --from=cpu_features /tmp/cpu_features-install/bin/list_cpu_features /usr/bi
 COPY --from=curl /usr/local/ /usr/local/
 COPY --from=ffmpeg /ffmpeg /usr/local/bin/
 COPY --from=ffmpeg /ffprobe /usr/local/bin/
-
-
 
